@@ -1,0 +1,31 @@
+/* add css module styles here (optional) */
+
+.container {
+  width: 350px;
+  position: relative;
+  margin: 40vh auto;
+}
+.searchResults {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  list-style-type: none;
+}
+.searchResults > li {
+  padding: 10px;
+  border: 1px solid #e4e4e4;
+  background-color: #f0feff;
+  cursor: pointer;
+}
+.searchResults > li:hover {
+  background-color: #c5d3d4;
+}
+.input {
+  border-radius: 5px;
+  padding: 10px 5px;
+  width: 100%;
+  border: 1px solid #cccccc;
+  outline: none;
+  box-sizing: border-box;
+}
