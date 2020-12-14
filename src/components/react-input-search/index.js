@@ -37,6 +37,7 @@ const ReactInputSearch = (props) => {
       case 'Enter':
         setShowOptions(false);
         setUserInput(filteredOptions[activeItem].value);
+        setActiveItem(-1);
         break;
       default:
         break;
@@ -46,6 +47,7 @@ const ReactInputSearch = (props) => {
   const onChangeHandler = (e) => {
     setUserInput(e.target.value);
     searchHandler(e.target.value);
+    setActiveItem(-1);
   };
 
   const search = (value) => {
