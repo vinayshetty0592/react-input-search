@@ -1,9 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './styles.css';
+
 const ReactInputSearch = (props) => {
   const [userInput, setUserInput] = useState('');
   const [filteredOptions, setFilteredOptions] = useState([]);
-  const [showOption, setShowOptions] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const [activeItem, setActiveItem] = useState(-1);
+
+  const searchResultsNode = useRef();
+
+  useEffect(() => {
+    const handleMouseClick = (event) => {
+      if (searchResultsNode.current && !searchResultsNode.current.contains(event.target)) {
+        setActiveItem(-1);
+        setShowOptions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouseClick);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseClick);
+    };
+  }, []);
+
+  const onKeyDownHandler = ((event) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        if (activeItem < (filteredOptions.length - 1)) {
+          setActiveItem(activeItem + 1);
+        }
+        break;
+      case 'ArrowUp':
+        if (activeItem > 0) {
+          setActiveItem(activeItem - 1);
+        }
+        break;
+      case 'Enter':
+        setShowOptions(false);
+        setUserInput(filteredOptions[activeItem].value);
+        break;
+      default:
+        break;
+    }
+  });
 
   const onChangeHandler = (e) => {
     setUserInput(e.target.value);
@@ -32,6 +70,13 @@ const ReactInputSearch = (props) => {
     setUserInput(item.value);
   };
 
+  const onListItemHover = (key, status) => {
+    setActiveItem(-1);
+    if (status) {
+      setActiveItem(key);
+    }
+  };
+
   return (
     <div className='container'>
       <input
@@ -40,19 +85,28 @@ const ReactInputSearch = (props) => {
         name='search'
         placeholder='Enter Text'
         value={userInput}
+        onFocus={onChangeHandler}
         onChange={onChangeHandler}
+        onKeyDown={onKeyDownHandler}
         autoComplete='off'
       />
-      {filteredOptions.length > 0 && showOption && (
-        <ul className='searchResults'>
+      {filteredOptions.length > 0 && showOptions && (
+        <ul className='searchResults' ref={searchResultsNode}>
           {filteredOptions.map((item, key) => (
-            <li key={key} onClick={() => onItemClickHandler(item)}>
+            <li
+              key={key}
+              onClick={() => onItemClickHandler(item)}
+              className={`${activeItem === key && 'active'}`}
+              onMouseEnter={() => onListItemHover(key, true)}
+              onMouseLeave={() => onListItemHover(key, false)}
+            >
               {item.value}
             </li>
           ))}
         </ul>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

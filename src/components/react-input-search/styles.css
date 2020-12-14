@@ -18,7 +18,7 @@
   background-color: #f0feff;
   cursor: pointer;
 }
-.searchResults > li:hover {
+.searchResults > li.active {
   background-color: #c5d3d4;
 }
 .input {

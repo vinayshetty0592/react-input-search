@@ -2,7 +2,7 @@
   "name": "react-input-search",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vinayshetty0592.github.io//react-input-search",
+  "homepage": "https://vinayshetty0592.github.io/react-input-search",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
