@@ -1,6 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './styles.css';
 
+const useClickedOutsideTarget = (node) => {
+  const [clickedOutside, setClickedOutside] = useState(false);
+  useEffect(() => {
+    const handleMouseClick = (event) => {
+      if (node.current && !node.current.contains(event.target)) {
+        setClickedOutside(true);
+      } else {
+        setClickedOutside(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouseClick);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseClick);
+    };
+  }, [node]);
+  return clickedOutside;
+};
+
 const ReactInputSearch = (props) => {
   const [userInput, setUserInput] = useState('');
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -8,19 +26,15 @@ const ReactInputSearch = (props) => {
   const [activeItem, setActiveItem] = useState(-1);
 
   const searchResultsNode = useRef();
+  const clickedOutside = useClickedOutsideTarget(searchResultsNode);
+
 
   useEffect(() => {
-    const handleMouseClick = (event) => {
-      if (searchResultsNode.current && !searchResultsNode.current.contains(event.target)) {
-        setActiveItem(-1);
-        setShowOptions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleMouseClick);
-    return () => {
-      document.removeEventListener("mousedown", handleMouseClick);
-    };
-  }, []);
+    if (clickedOutside) {
+      setActiveItem(-1);
+      setShowOptions(false);
+    }
+  }, [clickedOutside]);
 
   const onKeyDownHandler = ((event) => {
     switch (event.key) {
